@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gorilla/mux"
 	"html/template"
 	"net/http"
@@ -10,19 +9,21 @@ import (
 var homeTemplate *template.Template
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := homeTemplate.Execute(w, nil); err != nil {
+	if err := homeTemplate.ExecuteTemplate(w, "home.gohtml", nil); err != nil {
 		panic(err)
 	}
 }
 
 func contact(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprint(w,"To get in touch, please send me email to <a href=\"mailto:o.dievri@outlook.com\">support</a>")
+	if err := homeTemplate.ExecuteTemplate(w, "contact.gohtml", nil); err != nil {
+		panic(err)
+	}
 }
 
 func main() {
 	var err error
-	homeTemplate, err = template.ParseFiles("views/home.gohtml")
+	homeTemplate, err = template.ParseFiles("views/home.gohtml", "views/contact.gohtml")
 	if err != nil {
 		panic(err)
 	}
